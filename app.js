@@ -2,7 +2,8 @@ $(function(){
 	$('form').submit(function(event){
 		event.preventDefault();
 		$('.text-report').removeClass('hidden');
-		var wordArray = getTokens($('#user-text').val());
+		var text = $('#user-text').val().replace(/\r?\n|\r/g, " ");
+		var wordArray = getTokens(text);
 		var wordCount =wordArray.length;
 		$('.js-wordcount').text(wordCount);
 		var wordLengths={};
@@ -14,7 +15,6 @@ $(function(){
 			else{
 				wordLengths[wordArray[i]]=wordArray[i].length;
 				totalCharacters+=wordArray[i].length;
-				//alert(word);
 			}
 		}
 		var uniqueWords=Object.keys(wordLengths).length;
@@ -25,5 +25,5 @@ $(function(){
 });
 
 function getTokens(rawString) {
-  return rawString.toLowerCase().split(/[ ,!.";:-]+/).filter(Boolean).sort();
+  return rawString.toLowerCase().match(/\b[^\s]+\b/g).sort();
 }
